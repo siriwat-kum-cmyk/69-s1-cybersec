@@ -1,4 +1,4 @@
-service:
+services:
   db:
     image: posgres:16-alpine
     container_name: 69-s1-db
