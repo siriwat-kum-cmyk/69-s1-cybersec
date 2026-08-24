@@ -1,0 +1,15 @@
+# API
+
+## Login
+POST http://localhost:8181/admin/login
+content-type: application/json
+
+{
+    "email": "",
+    "password": "",
+    "rememberMe": false
+}
+
+## Forgot
+## Profile
+## Resgister / Signup
