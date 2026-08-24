@@ -2,3 +2,4 @@ data/
 docker
 pgadmin/
 .env
+api.http
