@@ -1,15 +1,40 @@
-# API
+##api
 
-## Login
+
+##Signup
+GET http://localhost:8181/admin/auth/register-admin
+content-type: application/json
+
+{
+  "firstName": "",
+  "lastName": "",
+  "email": "",
+  "password": "",
+  "confirmPassword": ""
+}
+###                                     
+
+##login
 POST http://localhost:8181/admin/login
 content-type: application/json
 
 {
-    "email": "",
-    "password": "",
-    "rememberMe": false
+  "email": "",
+  "password": "",
+  "rememberMe": ""
 }
+###
 
-## Forgot
-## Profile
-## Resgister / Signup
+##profile
+GET http://localhost:8181/admin/me
+Authorization: Bearer {{login.response.body.$.data.token}}
+###
+
+##forgot
+GET http://localhost:8181/admin/auth/forgot-password
+content-type: application/json
+
+{
+  "email": ""
+}
+###
