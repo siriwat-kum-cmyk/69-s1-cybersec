@@ -1,37 +1,79 @@
-##api
+# =================================================================
+# ADMIN API (ผู้ดูแลระบบหลังบ้าน)
+# =================================================================
 
-
-##Signup
-GET http://localhost:8181/admin/auth/register-admin
+## Admin Signup
+POST http://localhost:8181/admin/register-admin
 content-type: application/json
 
 {
-  "firstName": "",
-  "lastName": "",
+  "firstname": "",
+  "lastname": "",
   "email": "",
-  "password": "",
-  "confirmPassword": ""
+  "password": ""
 }
-###                                     
+###
 
-##login
+## Admin Login
+# @name adminLogin
 POST http://localhost:8181/admin/login
 content-type: application/json
 
 {
   "email": "",
   "password": "",
-  "rememberMe": ""
+  "rememberMe": false
 }
 ###
 
-##profile
-GET http://localhost:8181/admin/me
-Authorization: Bearer {{login.response.body.$.data.token}}
+## Admin Profile
+GET http://localhost:8181/admin/users/me
+Authorization: Bearer {{adminLogin.response.body.data.token}}
 ###
 
-##forgot
-GET http://localhost:8181/admin/auth/forgot-password
+## Admin Forgot Password
+POST http://localhost:8181/admin/forgot-password
+content-type: application/json
+
+{
+  "email": ""
+}
+###
+
+
+# =================================================================
+# USER API (ผู้ใช้งานทั่วไป / End-User)
+# =================================================================
+
+## User Signup
+POST http://localhost:8181/api/auth/local/register
+content-type: application/json
+
+{
+  "username": "",
+  "email": "",
+  "password": ""
+}
+###
+
+## User Login
+# @name userLogin
+POST http://localhost:8181/api/auth/local
+content-type: application/json
+
+{
+  "identifier": "",
+  "password": ""
+}
+###
+
+## User Profile
+GET http://localhost:8181/api/users/me
+Authorization: Bearer {{userLogin.response.body.jwt}}
+###
+
+## User Forgot Password
+POST http://localhost:8181/api/auth/forgot-password
 content-type: application/json
 
 {
