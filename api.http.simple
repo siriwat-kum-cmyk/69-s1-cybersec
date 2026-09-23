@@ -29,8 +29,8 @@ POST {{baseUrl}}/admin/register-admin
 content-type: application/json
 
 {
-  "firstname": "siriwat",
-  "lastname": "kumplemjit",
+  "firstname": "",
+  "lastname": "",
   "email": "{{adminEmail}}",
   "password": "{{adminPassword}}"
 }
@@ -122,9 +122,9 @@ content-type: application/json
 
 {
   "data": {
-    "name": "Siriwat Kumplemjit",
-    "mobile": "0812345678",
-    "cardId": "1234567890123"
+    "name": "",
+    "mobile": "",
+    "cardId": ""
   }
 }
 ###
@@ -146,7 +146,7 @@ content-type: application/json
 
 {
   "data": {
-    "name": "Siriwat Updated"
+    "name": ""
   }
 }
 ###
@@ -166,7 +166,7 @@ content-type: application/json
 
 {
   "data": {
-    "name": "Cyber Security"
+    "name": ""
   }
 }
 ###
@@ -188,7 +188,7 @@ content-type: application/json
 
 {
   "data": {
-    "name": "Cyber Security Advanced"
+    "name": ""
   }
 }
 ###
@@ -208,7 +208,7 @@ content-type: application/json
 
 {
   "data": {
-    "name": "Ajarn Somchai"
+    "name": ""
   }
 }
 ###
@@ -230,7 +230,7 @@ content-type: application/json
 
 {
   "data": {
-    "name": "Ajarn Somchai Updated"
+    "name": ""
   }
 }
 ###
