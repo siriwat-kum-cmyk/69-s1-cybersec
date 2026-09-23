@@ -1,99 +1,241 @@
-# 1. ADMIN API
+@baseUrl = http://localhost:{{$dotenv APP_PORT}}
+@adminEmail = {{$dotenv API_ADMIN_EMAIL}}
+@adminPassword = {{$dotenv API_ADMIN_PASSWORD}}
+@adminNewPassword = {{$dotenv API_ADMIN_NEW_PASSWORD}}
+@adminResetToken = {{$dotenv API_ADMIN_RESET_TOKEN}}
 
-## 1.1 Admin Signup
-POST http://localhost:8181/admin/register-admin
-content-type: application/json
+@username = {{$dotenv API_USER_USERNAME}}
+@userEmail = {{$dotenv API_USER_EMAIL}}
+@userPassword = {{$dotenv API_USER_PASSWORD}}
+@userNewPassword = {{$dotenv API_USER_NEW_PASSWORD}}
+@userResetCode = {{$dotenv API_USER_RESET_CODE}}
 
-{
-  "firstname": "",
-  "lastname": "",
-  "email": "",
-  "password": ""
-}
-###
+## 1. ADMIN API
 
-## 1.2 Admin Login
+### 1.1 Admin Login
 # @name adminLogin
-POST http://localhost:8181/admin/login
+POST {{baseUrl}}/admin/login
 content-type: application/json
 
 {
-  "email": "",
-  "password": "",
+  "email": "{{adminEmail}}",
+  "password": "{{adminPassword}}",
   "rememberMe": false
 }
 ###
 
-## 1.3 Admin Profile
-GET http://localhost:8181/admin/users/me
+### 1.2 Admin Register
+POST {{baseUrl}}/admin/register-admin
+content-type: application/json
+
+{
+  "firstname": "siriwat",
+  "lastname": "kumplemjit",
+  "email": "{{adminEmail}}",
+  "password": "{{adminPassword}}"
+}
+###
+
+### 1.3 Admin Forgot Password
+POST {{baseUrl}}/admin/forgot-password
+content-type: application/json
+
+{
+  "email": "{{adminEmail}}"
+}
+###
+
+#### 1.3.1 Admin Reset Password
+POST {{baseUrl}}/admin/reset-password
+content-type: application/json
+
+{
+  "password": "{{adminNewPassword}}",
+  "resetPasswordToken": "{{adminResetToken}}"
+}
+###
+
+### 1.4 Admin Profile
+GET {{baseUrl}}/admin/users/me
 Authorization: Bearer {{adminLogin.response.body.data.token}}
 ###
 
-## 1.3.1 Admin Reset Password
-POST http://localhost:8181/admin/reset-password
-content-type: application/json
 
-{
-  "password": "",
-  "resetPasswordToken": ""
-}
-###
+## 2. USER API
 
-## 1.4 Admin Forgot Password
-POST http://localhost:8181/admin/forgot-password
-content-type: application/json
-
-{
-  "email": ""
-}
-###
-
-
-# 2. USER API
-
-## 2.1 User Signup
-POST http://localhost:8181/api/auth/local/register
-content-type: application/json
-
-{
-  "username": "",
-  "email": "",
-  "password": ""
-}
-###
-
-## 2.2 User Login
+### 2.1 User Login
 # @name userLogin
-POST http://localhost:8181/api/auth/local
+POST {{baseUrl}}/api/auth/local
 content-type: application/json
 
 {
-  "identifier": "",
-  "password": ""
+  "identifier": "{{userEmail}}",
+  "password": "{{userPassword}}"
 }
 ###
 
-## 2.3 User Profile
-GET http://localhost:8181/api/users/me
+### 2.2 User Register
+POST {{baseUrl}}/api/auth/local/register
+content-type: application/json
+
+{
+  "username": "{{username}}",
+  "email": "{{userEmail}}",
+  "password": "{{userPassword}}"
+}
+###
+
+### 2.3 User Forgot Password
+POST {{baseUrl}}/api/auth/forgot-password
+content-type: application/json
+
+{
+  "email": "{{userEmail}}"
+}
+###
+
+#### 2.3.1 User Reset Password
+POST {{baseUrl}}/api/auth/reset-password
+content-type: application/json
+
+{
+  "code": "{{userResetCode}}",
+  "password": "{{userNewPassword}}",
+  "passwordConfirmation": "{{userNewPassword}}"
+}
+###
+
+### 2.4 User Profile
+GET {{baseUrl}}/api/users/me
 Authorization: Bearer {{userLogin.response.body.jwt}}
 ###
 
-## 2.3.1 User Reset Password
-POST http://localhost:8181/api/auth/reset-password
+
+## 3. Content
+
+### 3.1 Student
+
+#### 3.1.1 Create
+POST {{baseUrl}}/api/students
+Authorization: Bearer {{userLogin.response.body.jwt}}
 content-type: application/json
 
 {
-  "code": "",
-  "password": "",
-  "passwordConfirmation": ""
+  "data": {
+    "name": "Siriwat Kumplemjit",
+    "mobile": "0812345678",
+    "cardId": "1234567890123"
+  }
 }
 ###
 
-## 2.4 User Forgot Password
-POST http://localhost:8181/api/auth/forgot-password
+#### 3.1.2 List All
+GET {{baseUrl}}/api/students
+Authorization: Bearer {{userLogin.response.body.jwt}}
+###
+
+#### 3.1.3 List with ID
+GET {{baseUrl}}/api/students/1
+Authorization: Bearer {{userLogin.response.body.jwt}}
+###
+
+#### 3.1.4 Update
+PUT {{baseUrl}}/api/students/1
+Authorization: Bearer {{userLogin.response.body.jwt}}
 content-type: application/json
 
 {
-  "email": ""
+  "data": {
+    "name": "Siriwat Updated"
+  }
 }
+###
+
+#### 3.1.5 Delete
+DELETE {{baseUrl}}/api/students/1
+Authorization: Bearer {{userLogin.response.body.jwt}}
+###
+
+
+### 3.2 Subject
+
+#### 3.2.1 Create
+POST {{baseUrl}}/api/subjects
+Authorization: Bearer {{userLogin.response.body.jwt}}
+content-type: application/json
+
+{
+  "data": {
+    "name": "Cyber Security"
+  }
+}
+###
+
+#### 3.2.2 List All
+GET {{baseUrl}}/api/subjects
+Authorization: Bearer {{userLogin.response.body.jwt}}
+###
+
+#### 3.2.3 List with ID
+GET {{baseUrl}}/api/subjects/1
+Authorization: Bearer {{userLogin.response.body.jwt}}
+###
+
+#### 3.2.4 Update
+PUT {{baseUrl}}/api/subjects/1
+Authorization: Bearer {{userLogin.response.body.jwt}}
+content-type: application/json
+
+{
+  "data": {
+    "name": "Cyber Security Advanced"
+  }
+}
+###
+
+#### 3.2.5 Delete
+DELETE {{baseUrl}}/api/subjects/1
+Authorization: Bearer {{userLogin.response.body.jwt}}
+###
+
+
+### 3.3 Teacher
+
+#### 3.3.1 Create
+POST {{baseUrl}}/api/teachers
+Authorization: Bearer {{userLogin.response.body.jwt}}
+content-type: application/json
+
+{
+  "data": {
+    "name": "Ajarn Somchai"
+  }
+}
+###
+
+#### 3.3.2 List All
+GET {{baseUrl}}/api/teachers
+Authorization: Bearer {{userLogin.response.body.jwt}}
+###
+
+#### 3.3.3 List with ID
+GET {{baseUrl}}/api/teachers/1
+Authorization: Bearer {{userLogin.response.body.jwt}}
+###
+
+#### 3.3.4 Update
+PUT {{baseUrl}}/api/teachers/1
+Authorization: Bearer {{userLogin.response.body.jwt}}
+content-type: application/json
+
+{
+  "data": {
+    "name": "Ajarn Somchai Updated"
+  }
+}
+###
+
+#### 3.3.5 Delete
+DELETE {{baseUrl}}/api/teachers/1
+Authorization: Bearer {{userLogin.response.body.jwt}}
 ###
