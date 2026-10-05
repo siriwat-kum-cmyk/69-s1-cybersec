@@ -123,7 +123,9 @@ coverage
 
 .env
 .env.*
-!.env.example
+!.env.simple
+api.http
+!api.http.simple
 license.txt
 exports
 .strapi

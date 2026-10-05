@@ -1,0 +1,132 @@
+@baseUrl = http://localhost:{{$dotenv PORT}}
+@doctorEmail = {{$dotenv DOCTOR_EMAIL}}
+@doctorPassword = {{$dotenv DOCTOR_PASSWORD}}
+@nurseEmail = {{$dotenv NURSE_EMAIL}}
+@nursePassword = {{$dotenv NURSE_PASSWORD}}
+
+### ====================================================================
+### 1. AUTHENTICATION
+### ====================================================================
+
+#### 1.1 Doctor Login
+# @name doctorLogin
+POST {{baseUrl}}/api/auth/local
+content-type: application/json
+
+{
+  "identifier": "{{doctorEmail}}",
+  "password": "{{doctorPassword}}"
+}
+###
+
+#### 1.2 Nurse Login
+# @name nurseLogin
+POST {{baseUrl}}/api/auth/local
+content-type: application/json
+
+{
+  "identifier": "{{nurseEmail}}",
+  "password": "{{nursePassword}}"
+}
+###
+
+
+### ====================================================================
+### 2. PATIENT MANAGEMENT
+### ====================================================================
+
+#### 2.1 Create Patient
+# @name createPatient
+POST {{baseUrl}}/api/patients
+Authorization: Bearer {{doctorLogin.response.body.jwt}}
+content-type: application/json
+
+{
+  "data": {
+    "fullName": "",
+    "idCard": "",
+    "phone": "",
+    "dateOfBirth": "",
+    "gender": ""
+  }
+}
+###
+
+#### 2.2 List Patients
+# @name listPatients
+GET {{baseUrl}}/api/patients
+Authorization: Bearer {{doctorLogin.response.body.jwt}}
+###
+
+#### 2.3 Get Patient by Document ID
+GET {{baseUrl}}/api/patients/{{createPatient.response.body.data.documentId}}
+Authorization: Bearer {{doctorLogin.response.body.jwt}}
+###
+
+
+### ====================================================================
+### 3. CONFIDENTIAL MEDICAL RECORDS
+### ====================================================================
+
+#### 3.1 Create Medical Record
+# @name createMedicalRecord
+POST {{baseUrl}}/api/medical-records
+Authorization: Bearer {{doctorLogin.response.body.jwt}}
+content-type: application/json
+
+{
+  "data": {
+    "patient": "{{createPatient.response.body.data.documentId}}",
+    "doctorName": "",
+    "recordDate": "",
+    "diagnosis": "",
+    "treatment": "",
+    "prescription": ""
+  }
+}
+###
+
+#### 3.2 List Medical Records
+# @name listMedicalRecords
+GET {{baseUrl}}/api/medical-records
+Authorization: Bearer {{doctorLogin.response.body.jwt}}
+###
+
+#### 3.3 Get Medical Record by ID (Doctor)
+GET {{baseUrl}}/api/medical-records/{{createMedicalRecord.response.body.data.documentId}}
+Authorization: Bearer {{doctorLogin.response.body.jwt}}
+###
+
+#### 3.4 Get Medical Record by ID (Nurse - Read Only)
+GET {{baseUrl}}/api/medical-records/{{createMedicalRecord.response.body.data.documentId}}
+Authorization: Bearer {{nurseLogin.response.body.jwt}}
+###
+
+
+### ====================================================================
+### 4. SECURITY & RBAC VERIFICATION
+### ====================================================================
+
+#### 4.1 RBAC Violation Test: Nurse Attempts Create (Expected: 403 Forbidden)
+POST {{baseUrl}}/api/medical-records
+Authorization: Bearer {{nurseLogin.response.body.jwt}}
+content-type: application/json
+
+{
+  "data": {
+    "patient": "{{createPatient.response.body.data.documentId}}",
+    "doctorName": "",
+    "recordDate": "",
+    "diagnosis": ""
+  }
+}
+###
+
+#### 4.2 Route Hardening Test: Attempt DELETE (Expected: 405 Method Not Allowed)
+DELETE {{baseUrl}}/api/medical-records/{{createMedicalRecord.response.body.data.documentId}}
+Authorization: Bearer {{doctorLogin.response.body.jwt}}
+###
+
+#### 4.3 Public Access Test: Without Token (Expected: 403 Forbidden)
+GET {{baseUrl}}/api/medical-records
+###

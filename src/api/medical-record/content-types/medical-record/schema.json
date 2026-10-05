@@ -1,0 +1,41 @@
+{
+  "kind": "collectionType",
+  "collectionName": "medical_records",
+  "info": {
+    "singularName": "medical-record",
+    "pluralName": "medical-records",
+    "displayName": "Medical Record",
+    "description": "Confidential medical records and clinical notes"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "patient": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::patient.patient",
+      "inversedBy": "medical_records"
+    },
+    "doctorName": {
+      "type": "string",
+      "required": true
+    },
+    "recordDate": {
+      "type": "date",
+      "required": true
+    },
+    "diagnosis": {
+      "type": "text",
+      "required": true
+    },
+    "treatment": {
+      "type": "text"
+    },
+    "prescription": {
+      "type": "text"
+    }
+  }
+}
+
