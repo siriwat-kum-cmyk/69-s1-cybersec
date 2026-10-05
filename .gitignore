@@ -1,4 +1,7 @@
 data/
 pgadmin/
 .env
+.env.*
+!.env.simple
 api.http
+*.log
