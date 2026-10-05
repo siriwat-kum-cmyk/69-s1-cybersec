@@ -122,10 +122,13 @@ coverage
 ############################
 
 .env
+.env.*
+!.env.example
 license.txt
 exports
 .strapi
 dist
 build
+types/generated/
 .strapi-updater.json
 .strapi-cloud.json
